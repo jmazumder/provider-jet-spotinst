@@ -1,14 +1,15 @@
 # ====================================================================================
 # Setup Project
 
-PROJECT_NAME := provider-jet-template
-PROJECT_REPO := github.com/crossplane-contrib/$(PROJECT_NAME)
+PROJECT_NAME := provider-jet-spotinst
+PROJECT_REPO := github.com/jmazumder/$(PROJECT_NAME)
 
-export TERRAFORM_VERSION := 1.0.11
-export TERRAFORM_PROVIDER_SOURCE := hashicorp/hashicups
-export TERRAFORM_PROVIDER_VERSION := 0.3.2
-export TERRAFORM_PROVIDER_DOWNLOAD_NAME := terraform-provider-hashicups
-export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX := https://github.com/hashicorp/terraform-provider-hashicups/releases/download/v0.3.2
+export TERRAFORM_VERSION := 1.0.5
+export TERRAFORM_PROVIDER_SOURCE := spotinst/spotinst
+export GOPROXY := https://proxy.golang.nike.com
+export TERRAFORM_PROVIDER_VERSION := 1.65.0
+export TERRAFORM_PROVIDER_DOWNLOAD_NAME := terraform-provider-spotinst
+export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX := https://github.com/spotinst/terraform-provider-spotinst/releases/v1.65.0
 
 PLATFORMS ?= linux_amd64 linux_arm64
 
@@ -50,7 +51,7 @@ GO111MODULE = on
 # Setup Images
 
 DOCKER_REGISTRY ?= crossplane
-IMAGES = provider-jet-template provider-jet-template-controller
+IMAGES = provider-jet-spotinst provider-jet-spotinst-controller
 -include build/makelib/image.mk
 
 # ====================================================================================

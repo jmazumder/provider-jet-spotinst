@@ -22,8 +22,8 @@ import (
 )
 
 const (
-	resourcePrefix = "template"
-	modulePath     = "github.com/crossplane-contrib/provider-jet-template"
+	resourcePrefix = "spotinst"
+	modulePath     = "github.com/jmazumder/provider-jet-spotinst"
 )
 
 // GetProvider returns provider configuration
@@ -37,6 +37,9 @@ func GetProvider(resourceMap map[string]*schema.Resource) *tjconfig.Provider {
 
 	pc := tjconfig.NewProvider(resourceMap, resourcePrefix, modulePath,
 		tjconfig.WithDefaultResourceFn(defaultResourceFn))
+	//tjconfig.WithIncludeList([]string{
+	//	"ocean$",
+	//}))
 
 	for _, configure := range []func(provider *tjconfig.Provider){
 		// add custom config functions
