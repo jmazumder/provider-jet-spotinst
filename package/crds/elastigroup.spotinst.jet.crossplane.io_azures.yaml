@@ -1,0 +1,515 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+  creationTimestamp: null
+  name: azures.elastigroup.spotinst.jet.crossplane.io
+spec:
+  group: elastigroup.spotinst.jet.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - spotinstjet
+    kind: Azure
+    listKind: AzureList
+    plural: azures
+    singular: azure
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Azure is the Schema for the Azures API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: AzureSpec defines the desired state of Azure
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: DeletionPolicy specifies what will happen to the underlying
+                  external when this managed resource is deleted - either "Delete"
+                  or "Orphan" the external resource.
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  customData:
+                    type: string
+                  desiredCapacity:
+                    format: int64
+                    type: integer
+                  healthCheck:
+                    items:
+                      properties:
+                        autoHealing:
+                          type: boolean
+                        gracePeriod:
+                          format: int64
+                          type: integer
+                        healthCheckType:
+                          type: string
+                      required:
+                      - healthCheckType
+                      type: object
+                    type: array
+                  image:
+                    items:
+                      properties:
+                        custom:
+                          items:
+                            properties:
+                              imageName:
+                                type: string
+                              resourceGroupName:
+                                type: string
+                            required:
+                            - imageName
+                            - resourceGroupName
+                            type: object
+                          type: array
+                        marketplace:
+                          items:
+                            properties:
+                              offer:
+                                type: string
+                              publisher:
+                                type: string
+                              sku:
+                                type: string
+                            required:
+                            - offer
+                            - publisher
+                            - sku
+                            type: object
+                          type: array
+                      type: object
+                    type: array
+                  integrationKubernetes:
+                    items:
+                      properties:
+                        clusterIdentifier:
+                          type: string
+                      required:
+                      - clusterIdentifier
+                      type: object
+                    type: array
+                  integrationMultaiRuntime:
+                    items:
+                      properties:
+                        deploymentId:
+                          type: string
+                      required:
+                      - deploymentId
+                      type: object
+                    type: array
+                  loadBalancers:
+                    items:
+                      properties:
+                        autoWeight:
+                          type: boolean
+                        balancerId:
+                          type: string
+                        targetSetId:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    type: array
+                  login:
+                    items:
+                      properties:
+                        password:
+                          type: string
+                        sshPublicKey:
+                          type: string
+                        userName:
+                          type: string
+                      required:
+                      - userName
+                      type: object
+                    type: array
+                  lowPrioritySizes:
+                    items:
+                      type: string
+                    type: array
+                  managedServiceIdentities:
+                    items:
+                      properties:
+                        name:
+                          type: string
+                        resourceGroupName:
+                          type: string
+                      required:
+                      - name
+                      - resourceGroupName
+                      type: object
+                    type: array
+                  maxSize:
+                    format: int64
+                    type: integer
+                  minSize:
+                    format: int64
+                    type: integer
+                  network:
+                    items:
+                      properties:
+                        additionalIpConfigs:
+                          items:
+                            properties:
+                              name:
+                                type: string
+                              privateIpVersion:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          type: array
+                        assignPublicIp:
+                          type: boolean
+                        resourceGroupName:
+                          type: string
+                        subnetName:
+                          type: string
+                        virtualNetworkName:
+                          type: string
+                      required:
+                      - resourceGroupName
+                      - subnetName
+                      - virtualNetworkName
+                      type: object
+                    type: array
+                  odSizes:
+                    items:
+                      type: string
+                    type: array
+                  product:
+                    type: string
+                  region:
+                    type: string
+                  resourceGroupName:
+                    type: string
+                  scalingDownPolicy:
+                    items:
+                      properties:
+                        actionType:
+                          type: string
+                        adjustment:
+                          type: string
+                        cooldown:
+                          format: int64
+                          type: integer
+                        dimensions:
+                          items:
+                            properties:
+                              name:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          type: array
+                        evaluationPeriods:
+                          format: int64
+                          type: integer
+                        maxTargetCapacity:
+                          type: string
+                        maximum:
+                          type: string
+                        metricName:
+                          type: string
+                        minTargetCapacity:
+                          type: string
+                        minimum:
+                          type: string
+                        namespace:
+                          type: string
+                        operator:
+                          type: string
+                        period:
+                          format: int64
+                          type: integer
+                        policyName:
+                          type: string
+                        statistic:
+                          type: string
+                        target:
+                          type: string
+                        threshold:
+                          type: number
+                        unit:
+                          type: string
+                      required:
+                      - metricName
+                      - namespace
+                      - policyName
+                      - threshold
+                      type: object
+                    type: array
+                  scalingUpPolicy:
+                    items:
+                      properties:
+                        actionType:
+                          type: string
+                        adjustment:
+                          type: string
+                        cooldown:
+                          format: int64
+                          type: integer
+                        dimensions:
+                          items:
+                            properties:
+                              name:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                            - name
+                            type: object
+                          type: array
+                        evaluationPeriods:
+                          format: int64
+                          type: integer
+                        maxTargetCapacity:
+                          type: string
+                        maximum:
+                          type: string
+                        metricName:
+                          type: string
+                        minTargetCapacity:
+                          type: string
+                        minimum:
+                          type: string
+                        namespace:
+                          type: string
+                        operator:
+                          type: string
+                        period:
+                          format: int64
+                          type: integer
+                        policyName:
+                          type: string
+                        statistic:
+                          type: string
+                        target:
+                          type: string
+                        threshold:
+                          type: number
+                        unit:
+                          type: string
+                      required:
+                      - metricName
+                      - namespace
+                      - policyName
+                      - threshold
+                      type: object
+                    type: array
+                  scheduledTask:
+                    items:
+                      properties:
+                        adjustment:
+                          type: string
+                        adjustmentPercentage:
+                          type: string
+                        batchSizePercentage:
+                          type: string
+                        cronExpression:
+                          type: string
+                        gracePeriod:
+                          type: string
+                        isEnabled:
+                          type: boolean
+                        scaleMaxCapacity:
+                          type: string
+                        scaleMinCapacity:
+                          type: string
+                        scaleTargetCapacity:
+                          type: string
+                        taskType:
+                          type: string
+                      required:
+                      - cronExpression
+                      - taskType
+                      type: object
+                    type: array
+                  shutdownScript:
+                    type: string
+                  strategy:
+                    items:
+                      properties:
+                        drainingTimeout:
+                          format: int64
+                          type: integer
+                        lowPriorityPercentage:
+                          format: int64
+                          type: integer
+                        odCount:
+                          format: int64
+                          type: integer
+                      type: object
+                    type: array
+                  updatePolicy:
+                    items:
+                      properties:
+                        rollConfig:
+                          items:
+                            properties:
+                              batchSizePercentage:
+                                format: int64
+                                type: integer
+                              gracePeriod:
+                                format: int64
+                                type: integer
+                              healthCheckType:
+                                type: string
+                            required:
+                            - batchSizePercentage
+                            type: object
+                          type: array
+                        shouldRoll:
+                          type: boolean
+                      required:
+                      - shouldRoll
+                      type: object
+                    type: array
+                  userData:
+                    type: string
+                required:
+                - lowPrioritySizes
+                - network
+                - odSizes
+                - product
+                - region
+                - resourceGroupName
+                - strategy
+                type: object
+              providerConfigRef:
+                default:
+                  name: default
+                description: ProviderConfigReference specifies how the provider that
+                  will be used to create, observe, update, and delete this managed
+                  resource should be configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+              providerRef:
+                description: 'ProviderReference specifies the provider that will be
+                  used to create, observe, update, and delete this managed resource.
+                  Deprecated: Please use ProviderConfigReference, i.e. `providerConfigRef`'
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: WriteConnectionSecretToReference specifies the namespace
+                  and name of a Secret to which any connection details for this managed
+                  resource should be written. Connection details frequently include
+                  the endpoint, username, and password required to connect to the
+                  managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+          status:
+            description: AzureStatus defines the observed state of Azure.
+            properties:
+              atProvider:
+                properties:
+                  id:
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time this condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A Message containing details about this condition's
+                        last transition from one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: Type of this condition. At most one of each condition
+                        type may apply to a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

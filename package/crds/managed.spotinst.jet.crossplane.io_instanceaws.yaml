@@ -1,0 +1,403 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.6.2
+  creationTimestamp: null
+  name: instanceaws.managed.spotinst.jet.crossplane.io
+spec:
+  group: managed.spotinst.jet.crossplane.io
+  names:
+    categories:
+    - crossplane
+    - managed
+    - spotinstjet
+    kind: InstanceAws
+    listKind: InstanceAwsList
+    plural: instanceaws
+    singular: instanceaws
+  scope: Cluster
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=='Ready')].status
+      name: READY
+      type: string
+    - jsonPath: .status.conditions[?(@.type=='Synced')].status
+      name: SYNCED
+      type: string
+    - jsonPath: .metadata.annotations.crossplane\.io/external-name
+      name: EXTERNAL-NAME
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: InstanceAws is the Schema for the InstanceAwss API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: InstanceAwsSpec defines the desired state of InstanceAws
+            properties:
+              deletionPolicy:
+                default: Delete
+                description: DeletionPolicy specifies what will happen to the underlying
+                  external when this managed resource is deleted - either "Delete"
+                  or "Orphan" the external resource.
+                enum:
+                - Orphan
+                - Delete
+                type: string
+              forProvider:
+                properties:
+                  autoHealing:
+                    type: boolean
+                  blockDeviceMappings:
+                    items:
+                      properties:
+                        deviceName:
+                          type: string
+                        ebs:
+                          items:
+                            properties:
+                              deleteOnTermination:
+                                type: boolean
+                              iops:
+                                format: int64
+                                type: integer
+                              throughput:
+                                format: int64
+                                type: integer
+                              volumeSize:
+                                format: int64
+                                type: integer
+                              volumeType:
+                                type: string
+                            type: object
+                          type: array
+                      required:
+                      - deviceName
+                      type: object
+                    type: array
+                  blockDevicesMode:
+                    type: string
+                  cpuCredits:
+                    type: string
+                  description:
+                    type: string
+                  drainingTimeout:
+                    format: int64
+                    type: integer
+                  ebsOptimized:
+                    type: boolean
+                  elasticIp:
+                    type: string
+                  enableMonitoring:
+                    type: boolean
+                  fallBackToOd:
+                    type: boolean
+                  gracePeriod:
+                    format: int64
+                    type: integer
+                  healthCheckType:
+                    type: string
+                  iamInstanceProfile:
+                    type: string
+                  imageId:
+                    type: string
+                  instanceTypes:
+                    items:
+                      type: string
+                    type: array
+                  integrationRoute53:
+                    items:
+                      properties:
+                        domains:
+                          items:
+                            properties:
+                              hostedZoneId:
+                                type: string
+                              recordSetType:
+                                type: string
+                              recordSets:
+                                items:
+                                  properties:
+                                    name:
+                                      type: string
+                                    usePublicDns:
+                                      type: boolean
+                                    usePublicIp:
+                                      type: boolean
+                                  required:
+                                  - name
+                                  type: object
+                                type: array
+                              spotinstAcctId:
+                                type: string
+                            required:
+                            - hostedZoneId
+                            - recordSets
+                            type: object
+                          type: array
+                      required:
+                      - domains
+                      type: object
+                    type: array
+                  keyPair:
+                    type: string
+                  lifeCycle:
+                    type: string
+                  loadBalancers:
+                    items:
+                      properties:
+                        arn:
+                          type: string
+                        autoWeight:
+                          type: boolean
+                        azAwareness:
+                          type: boolean
+                        balancerId:
+                          type: string
+                        name:
+                          type: string
+                        targetSetId:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    type: array
+                  managedInstanceAction:
+                    items:
+                      properties:
+                        type:
+                          type: string
+                      required:
+                      - type
+                      type: object
+                    type: array
+                  minimumInstanceLifetime:
+                    format: int64
+                    type: integer
+                  networkInterface:
+                    items:
+                      properties:
+                        associateIpv6Address:
+                          type: boolean
+                        associatePublicIpAddress:
+                          type: boolean
+                        deviceIndex:
+                          type: string
+                      required:
+                      - deviceIndex
+                      type: object
+                    type: array
+                  optimizationWindows:
+                    items:
+                      type: string
+                    type: array
+                  orientation:
+                    type: string
+                  persistBlockDevices:
+                    type: boolean
+                  persistPrivateIp:
+                    type: boolean
+                  persistRootDevice:
+                    type: boolean
+                  placementTenancy:
+                    type: string
+                  preferredType:
+                    type: string
+                  privateIp:
+                    type: string
+                  product:
+                    type: string
+                  region:
+                    type: string
+                  resourceTagSpecification:
+                    items:
+                      properties:
+                        shouldTagAmis:
+                          type: boolean
+                        shouldTagEnis:
+                          type: boolean
+                        shouldTagSnapshots:
+                          type: boolean
+                        shouldTagVolumes:
+                          type: boolean
+                      type: object
+                    type: array
+                  revertToSpot:
+                    items:
+                      properties:
+                        performAt:
+                          type: string
+                      required:
+                      - performAt
+                      type: object
+                    type: array
+                  scheduledTask:
+                    items:
+                      properties:
+                        cronExpression:
+                          type: string
+                        frequency:
+                          type: string
+                        isEnabled:
+                          type: boolean
+                        startTime:
+                          type: string
+                        taskType:
+                          type: string
+                      required:
+                      - taskType
+                      type: object
+                    type: array
+                  securityGroupIds:
+                    items:
+                      type: string
+                    type: array
+                  shutdownScript:
+                    type: string
+                  subnetIds:
+                    items:
+                      type: string
+                    type: array
+                  tags:
+                    items:
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      type: object
+                    type: array
+                  unhealthyDuration:
+                    format: int64
+                    type: integer
+                  userData:
+                    type: string
+                  utilizeReservedInstances:
+                    type: boolean
+                  vpcId:
+                    type: string
+                required:
+                - imageId
+                - instanceTypes
+                - persistBlockDevices
+                - product
+                - subnetIds
+                - vpcId
+                type: object
+              providerConfigRef:
+                default:
+                  name: default
+                description: ProviderConfigReference specifies how the provider that
+                  will be used to create, observe, update, and delete this managed
+                  resource should be configured.
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+              providerRef:
+                description: 'ProviderReference specifies the provider that will be
+                  used to create, observe, update, and delete this managed resource.
+                  Deprecated: Please use ProviderConfigReference, i.e. `providerConfigRef`'
+                properties:
+                  name:
+                    description: Name of the referenced object.
+                    type: string
+                required:
+                - name
+                type: object
+              writeConnectionSecretToRef:
+                description: WriteConnectionSecretToReference specifies the namespace
+                  and name of a Secret to which any connection details for this managed
+                  resource should be written. Connection details frequently include
+                  the endpoint, username, and password required to connect to the
+                  managed resource.
+                properties:
+                  name:
+                    description: Name of the secret.
+                    type: string
+                  namespace:
+                    description: Namespace of the secret.
+                    type: string
+                required:
+                - name
+                - namespace
+                type: object
+            required:
+            - forProvider
+            type: object
+          status:
+            description: InstanceAwsStatus defines the observed state of InstanceAws.
+            properties:
+              atProvider:
+                properties:
+                  id:
+                    type: string
+                type: object
+              conditions:
+                description: Conditions of the resource.
+                items:
+                  description: A Condition that may apply to a resource.
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime is the last time this condition
+                        transitioned from one status to another.
+                      format: date-time
+                      type: string
+                    message:
+                      description: A Message containing details about this condition's
+                        last transition from one status to another, if any.
+                      type: string
+                    reason:
+                      description: A Reason for this condition's last transition from
+                        one status to another.
+                      type: string
+                    status:
+                      description: Status of this condition; is it currently True,
+                        False, or Unknown?
+                      type: string
+                    type:
+                      description: Type of this condition. At most one of each condition
+                        type may apply to a resource at any point in time.
+                      type: string
+                  required:
+                  - lastTransitionTime
+                  - reason
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
